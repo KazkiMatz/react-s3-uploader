@@ -8,7 +8,7 @@ S3Upload.prototype.signingUrl = '/sign-s3';
 S3Upload.prototype.signingUrlMethod = 'GET';
 S3Upload.prototype.successResponses = [200, 201];
 S3Upload.prototype.fileElement = null;
-S3Upload.prototype.files = null;
+S3Upload.prototype.files = [];
 
 S3Upload.prototype.onFinishS3Put = function(signResult, file) {
     return console.log('base.onFinishS3Put()', signResult.publicUrl);
@@ -42,7 +42,8 @@ function S3Upload(options) {
             this[option] = options[option];
         }
     }
-    var files = this.fileElement ? this.fileElement.files : this.files || [];
+    //var files = this.fileElement ? this.fileElement.files : this.files || [];
+    var files = this.files.length > 0 ? this.files : this.fileElement.files || []
     this.handleFileSelect(files);
 }
 

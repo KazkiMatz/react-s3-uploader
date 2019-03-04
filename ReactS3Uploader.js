@@ -8,6 +8,8 @@ var React = require('react'),
     objectAssign = require('object-assign');
 
 var propTypes = {
+    files: PropTypes.array,
+    inputKey: PropTypes.string,
     signingUrl: PropTypes.string,
     getSignedUrl: PropTypes.func,
     preprocess: PropTypes.func,
@@ -68,6 +70,7 @@ var ReactS3Uploader = createReactClass({
 
     uploadFile: function() {
         this.myUploader = new S3Upload({
+            files: this.props.files,
             fileElement: ReactDOM.findDOMNode(this),
             signingUrl: this.props.signingUrl,
             getSignedUrl: this.props.getSignedUrl,
@@ -96,6 +99,12 @@ var ReactS3Uploader = createReactClass({
         clearInputFile(ReactDOM.findDOMNode(this));
     },
 
+    componentDidMount: function() {
+        if ((this.props.files || []).length > 0) {
+            this.uploadFile();
+        }
+    },
+
     render: function() {
         return React.createElement('input', this.getInputProps());
     },
@@ -105,7 +114,8 @@ var ReactS3Uploader = createReactClass({
         // `inputRef` by `ReactS3Uploader.propTypes`
         var additional = {
             type: 'file',
-            ref: this.props.inputRef
+            ref: this.props.inputRef,
+            key: this.props.inputKey || ''
         };
 
         if ( this.props.autoUpload ) {
